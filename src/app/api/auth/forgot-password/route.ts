@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     }
 
     // Find user
-    const result = await pool.query(
+    const result = await db.query(
       'SELECT id FROM users WHERE email = $1',
       [email]
     );
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
     // Store token
-    await pool.query(
+    await db.query(
       'INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES ($1, $2, $3)',
       [userId, token, expiresAt]
     );

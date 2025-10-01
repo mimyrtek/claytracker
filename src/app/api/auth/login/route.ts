@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     }
 
     // Find user
-    const result = await pool.query(
+    const result = await db.query(
       'SELECT id, username, email, password_hash FROM users WHERE email = $1',
       [email]
     );

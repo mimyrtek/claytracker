@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     }
 
     // Find valid token
-    const result = await pool.query(
+    const result = await db.query(
       'SELECT user_id FROM password_reset_tokens WHERE token = $1 AND expires_at > NOW()',
       [token]
     );
@@ -39,13 +39,13 @@ export async function POST(request: Request) {
     const passwordHash = await hashPassword(password);
 
     // Update password
-    await pool.query(
+    await db.query(
       'UPDATE users SET password_hash = $1, updated_at = NOW() WHERE id = $2',
       [passwordHash, userId]
     );
 
     // Delete used token
-    await pool.query(
+    await db.query(
       'DELETE FROM password_reset_tokens WHERE token = $1',
       [token]
     );

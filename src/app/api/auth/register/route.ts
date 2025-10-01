@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
+db.queryimport { NextResponse } from 'next/server';
+import db from '@/lib/db';
 import { hashPassword } from '@/lib/auth';
 
 export async function POST(request: Request) {
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     }
 
     // Check if user exists
-    const existingUser = await pool.query(
+    const existingUser = await db.query(
       'SELECT id FROM users WHERE email = $1 OR username = $2',
       [email, username]
     );
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     const passwordHash = await hashPassword(password);
 
     // Create user
-    const result = await pool.query(
+    const result = await db.query(
       'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id, username, email, created_at',
       [username, email, passwordHash]
     );
