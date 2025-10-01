@@ -1,4 +1,4 @@
-import { Pool, QueryResult, QueryResultRow } from 'pg';
+import { Pool, QueryResult, QueryResultRow, QueryConfig } from 'pg';
 
 let pool: Pool | null = null;
 
@@ -15,7 +15,6 @@ export function getPool(): Pool {
     
     pool = new Pool({
       connectionString: databaseUrl,
-      // No SSL needed for private networking within Railway
       ssl: databaseUrl.includes('railway.internal') ? false : {
         rejectUnauthorized: false
       },
@@ -35,9 +34,9 @@ export function getPool(): Pool {
 
 // Export a simple wrapper that matches Pool's query signature
 const db = {
-  query: <T extends QueryResultRow = any>(
-    queryTextOrConfig: string | any,
-    values?: any[]
+  query: <T extends QueryResultRow = QueryResultRow>(
+    queryTextOrConfig: string | QueryConfig,
+    values?: unknown[]
   ): Promise<QueryResult<T>> => {
     const pool = getPool();
     return pool.query(queryTextOrConfig, values);
