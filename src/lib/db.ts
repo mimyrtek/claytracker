@@ -1,4 +1,4 @@
-import { Pool } from 'pg';
+import { Pool, QueryResult, QueryResultRow } from 'pg';
 
 let pool: Pool | null = null;
 
@@ -33,11 +33,14 @@ export function getPool(): Pool {
   return pool;
 }
 
-// Export the getter, not the pool directly
+// Export a simple wrapper that matches Pool's query signature
 const db = {
-  query: async (...args: Parameters<Pool['query']>) => {
+  query: <T extends QueryResultRow = any>(
+    queryTextOrConfig: string | any,
+    values?: any[]
+  ): Promise<QueryResult<T>> => {
     const pool = getPool();
-    return pool.query(...args);
+    return pool.query(queryTextOrConfig, values);
   }
 };
 
