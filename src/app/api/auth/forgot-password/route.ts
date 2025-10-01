@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
+import db from '@/lib/db';
 import { sendPasswordResetEmail } from '@/lib/email';
 import crypto from 'crypto';
 

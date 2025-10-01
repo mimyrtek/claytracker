@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
+import db from '@/lib/db';
 import { verifyPassword, generateToken, setAuthCookie } from '@/lib/auth';
 
 export async function POST(request: Request) {
